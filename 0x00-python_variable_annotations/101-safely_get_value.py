@@ -7,7 +7,7 @@ import typing
 
 T = typing.TypeVar("T")
 Type = typing.Union[typing.Any, T]
-T1 = typing.Mapping[typing.Any, T]
+T1 = typing.Mapping  # [typing.Any, T]
 Def = typing.Union[T, None]
 
 
