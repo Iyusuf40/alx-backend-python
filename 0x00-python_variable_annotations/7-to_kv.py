@@ -6,6 +6,6 @@ from typing import List, Set, Dict, Tuple
 import typing
 
 
-def to_kv(k: str, r: typing.Union[int, float]) -> Tuple[str, float]:
+def to_kv(k: str, v: typing.Union[int, float]) -> Tuple[str, float]:
     """ joins two strings """
-    return k, r*r
+    return (k, v*v)
