@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" module doc """
+""" module used to test mypy """
 
 from typing import List, Set, Dict, Tuple
 import typing
@@ -7,10 +7,7 @@ import typing
 
 def zoom_array(lst: List, factor: int = 2) -> List:
     """ function to annotate """
-    zoomed_in: List = [
-        item for item in lst
-        for i in range(factor)
-    ]
+    zoomed_in: List = [item for item in lst for i in range(factor)]
     return zoomed_in
 
 
