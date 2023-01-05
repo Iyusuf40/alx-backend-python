@@ -8,6 +8,4 @@ import typing
 
 def to_kv(k: str, r: typing.Union[int, float]) -> Tuple[str, float]:
     """ joins two strings """
-    res = k, r*r
-
-    return res
+    return k, r*r
