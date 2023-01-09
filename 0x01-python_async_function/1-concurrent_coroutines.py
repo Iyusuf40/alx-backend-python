@@ -15,7 +15,7 @@ async def wrapper(f: Callable, arg: int, lst: List[float]) -> None:
     lst.append(x)
 
 
-async def wait_n(n: int, max_delay: int) -> List[float]:
+async def wait_n(n: int, max_delay: int) -> str:
     """demo of asyncio"""
     coros = []
     lst: List[float] = []
