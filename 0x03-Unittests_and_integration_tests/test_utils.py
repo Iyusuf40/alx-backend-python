@@ -13,6 +13,7 @@ from typing import (
 import unittest
 from unittest.mock import MagicMock
 from unittest.mock import patch
+from unittest import mock
 from utils import (
     get_json,
     access_nested_map,
@@ -59,7 +60,35 @@ class TestGetJson(unittest.TestCase):
         """ mocks http request to url """
         get_json_mock.json = MagicMock(return_value=payload)
         assert_equal(get_json_mock.json(url), payload)
-        get_json_mock.json.assert_called_once
+        get_json_mock.json.assert_called_once_with(url)
+        return get_json_mock
+
+
+class TestMemoize(unittest.TestCase):
+    """ tests memoize decorator """
+
+    def test_memoize(self):
+        """ tests memoize decorator """
+        class TestClass:
+            """ used for testing """
+
+            def a_method(self):
+                """ a_method is memoized """
+                return 42
+
+            @memoize
+            def a_property(self):
+                """ sets to a readonly property of
+                TestClass instance """
+                return self.a_method()
+
+        global testInstance
+        testInstance = TestClass()
+        with patch("__main__.testInstance.a_method",
+                   return_value=42) as mocked_method:
+            assert_equal(testInstance.a_property, 42)
+            assert_equal(testInstance.a_property, 42)
+            testInstance.a_method.assert_called_once
 
 
 if __name__ == "__main__":
