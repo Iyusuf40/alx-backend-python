@@ -11,6 +11,8 @@ from typing import (
     Callable,
 )
 import unittest
+from unittest.mock import MagicMock
+from unittest.mock import patch
 from utils import (
     get_json,
     access_nested_map,
@@ -42,6 +44,22 @@ class TestAccessNestedMap(unittest.TestCase):
         """ tests for expected exceptions """
         with self.assertRaises(KeyError):
             access_nested_map(map, seq)
+
+
+class TestGetJson(unittest.TestCase):
+    """ tests the get_json function """
+    @parameterized.expand(
+        [
+            ("http://example.com", {"payload": True}),
+            ("http://holberton.io", {"payload": False})
+        ]
+    )
+    @patch("utils.get_json")
+    def test_get_json(self, url, payload, get_json_mock):
+        """ mocks http request to url """
+        get_json_mock.json = MagicMock(return_value=payload)
+        assert_equal(get_json_mock.json(url), payload)
+        get_json_mock.json.assert_called_once
 
 
 if __name__ == "__main__":
