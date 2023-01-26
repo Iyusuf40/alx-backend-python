@@ -82,7 +82,9 @@ class TestMemoize(unittest.TestCase):
                 TestClass instance """
                 return self.a_method()
 
-        global testInstance
+        global testInstance  # hack to allow access from toplevel
+        # module name. easier alternative is patch.object to pacth
+        # TestClass testInsatnce directly
         testInstance = TestClass()
         with patch("__main__.testInstance.a_method",
                    return_value=42) as mocked_method:
