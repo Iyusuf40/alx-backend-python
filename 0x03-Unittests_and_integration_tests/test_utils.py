@@ -19,7 +19,7 @@ from utils import (
     access_nested_map,
     memoize,
 )
-from nose.tools import assert_equal
+# from nose.tools import assert_equal
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -33,7 +33,7 @@ class TestAccessNestedMap(unittest.TestCase):
     )
     def test_access_nested_map(self, map, seq, exp):
         """ tests for expected outcomes """
-        assert_equal(access_nested_map(map, seq), exp)
+        self.assertEqual(access_nested_map(map, seq), exp)
 
     @parameterized.expand(
         [
@@ -59,7 +59,7 @@ class TestGetJson(unittest.TestCase):
     def test_get_json(self, url, payload, get_json_mock):
         """ mocks http request to url """
         get_json_mock.json = MagicMock(return_value=payload)
-        assert_equal(get_json_mock.json(url), payload)
+        self.assertEqual(get_json_mock.json(url), payload)
         get_json_mock.json.assert_called_once_with(url)
         return get_json_mock
 
@@ -88,8 +88,8 @@ class TestMemoize(unittest.TestCase):
         testInstance = TestClass()
         with patch("__main__.testInstance.a_method",
                    return_value=42) as mocked_method:
-            assert_equal(testInstance.a_property, 42)
-            assert_equal(testInstance.a_property, 42)
+            self.assertEqual(testInstance.a_property, 42)
+            self.assertEqual(testInstance.a_property, 42)
             testInstance.a_method.assert_called_once
 
 
