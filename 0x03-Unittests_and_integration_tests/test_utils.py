@@ -125,6 +125,23 @@ class TestGithubOrgClient(unittest.TestCase):
             self.assertEqual(client_inst._public_repos_url,
                              payload.get("repos_url"))
 
+    @parameterized.expand([
+        ("google", {"repos_url": "https://google.com"}),
+        ("abc", {"repos_url": "https://abc.com"})
+        ])
+    @patch("client.get_json")
+    def test_public_repos(self, org, payload, m_get_json):
+        """ tests org method of GithubOrgClient """
+        import client
+        client_inst = GithubOrgClient(org)
+        with patch("client.GithubOrgClient._public_repos_url",
+                   new_callable=PropertyMock,
+                   return_value=payload.get("repos_url")) as m_pru:
+            self.assertEqual(client_inst._public_repos_url,
+                             payload.get("repos_url"))
+            client.get_json.assert_called_once
+            m_pru.assert_called_once
+
 
 if __name__ == "__main__":
     unittest.main()
