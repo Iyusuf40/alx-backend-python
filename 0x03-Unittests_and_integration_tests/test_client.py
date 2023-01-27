@@ -50,30 +50,30 @@ class TestGithubOrgClient(unittest.TestCase):
             url = client_inst.ORG_URL.format(org=org)
             client.get_json.assert_called_once_with(url)
 
-    # @parameterized.expand([
-    #     ("google", {"repos_url": "https://google.com"}),
-    #     ("abc", {"repos_url": "https://abc.com"})
-    #     ])
-    # def test_public_repos_url(self, org, payload):
-    #     """ tests org method of GithubOrgClient """
-    #     client_inst = GithubOrgClient(org)
-    #     with patch("client.GithubOrgClient.org",
-    #                new_callable=PropertyMock,
-    #                return_value=payload) as m_org:
-    #         self.assertEqual(client_inst._public_repos_url,
-    #                          payload.get("repos_url"))
-
     @parameterized.expand([
         ("google", {"repos_url": "https://google.com"}),
         ("abc", {"repos_url": "https://abc.com"})
         ])
-    @patch("client.GithubOrgClient.org", new_callable=PropertyMock)
-    def test_public_repos_url(self, org, payload, m_org):
+    def test_public_repos_url(self, org, payload):
         """ tests org method of GithubOrgClient """
         client_inst = GithubOrgClient(org)
-        m_org.return_value = payload
-        self.assertEqual(client_inst._public_repos_url,
-                         payload.get("repos_url"))
+        with patch("client.GithubOrgClient.org",
+                   new_callable=PropertyMock,
+                   return_value=payload) as m_org:
+            self.assertEqual(client_inst._public_repos_url,
+                             payload.get("repos_url"))
+
+    # @parameterized.expand([
+    #     ("google", {"repos_url": "https://google.com"}),
+    #     ("abc", {"repos_url": "https://abc.com"})
+    #     ])
+    # @patch("client.GithubOrgClient.org", new_callable=PropertyMock)
+    # def test_public_repos_url(self, org, payload, m_org):
+    #     """ tests org method of GithubOrgClient """
+    #     client_inst = GithubOrgClient(org)
+    #     m_org.return_value = payload
+    #     self.assertEqual(client_inst._public_repos_url,
+    #                      payload.get("repos_url"))
 
     @parameterized.expand([
         ("google", {"repos_url": "https://google.com"}),
