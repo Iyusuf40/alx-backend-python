@@ -22,6 +22,7 @@ from utils import (
 from client import GithubOrgClient
 from fixtures import TEST_PAYLOAD
 import requests
+import client
 
 
 org_payload = TEST_PAYLOAD[0][0]
@@ -43,7 +44,7 @@ class TestGithubOrgClient(unittest.TestCase):
         # patching utils.get_json will fail mocking because
         # the get get_json object of interest is the one
         # imported in client module
-        import client  # to assert it was called
+        # import client  # to assert it was called
         with patch("client.get_json", return_value=org) as m_gt_json:
             self.assertEqual(client_inst.org, org)
             url = client_inst.ORG_URL.format(org=org)
@@ -69,7 +70,6 @@ class TestGithubOrgClient(unittest.TestCase):
     @patch("client.get_json")
     def test_public_repos(self, org, payload, m_get_json):
         """ tests org method of GithubOrgClient """
-        import client
         client_inst = GithubOrgClient(org)
         with patch("client.GithubOrgClient._public_repos_url",
                    new_callable=PropertyMock,
@@ -111,7 +111,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         cls.patcher.stop()
 
     def test_req(self):
-        """ doc string """
+        """ test_req doc string """
         self.assertEqual(self.get_patcher("google").json(), repos_payload[0])
 
     @parameterized.expand([
@@ -121,7 +121,6 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     @patch("client.get_json")
     def test_public_repos(self, org, payload, m_get_json):
         """ tests org method of GithubOrgClient """
-        import client
         client_inst = GithubOrgClient(org)
         with patch("client.GithubOrgClient._public_repos_url",
                    new_callable=PropertyMock,
