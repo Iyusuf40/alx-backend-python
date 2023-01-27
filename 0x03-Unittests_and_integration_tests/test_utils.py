@@ -2,7 +2,7 @@
 """ module contains unittest cases """
 
 
-from parameterized import parameterized
+from parameterized import parameterized, parameterized_class
 from typing import (
     Mapping,
     Sequence,
@@ -20,6 +20,14 @@ from utils import (
     memoize,
 )
 from client import GithubOrgClient
+from fixtures import TEST_PAYLOAD
+import requests
+
+
+org_payload = TEST_PAYLOAD[0][0]
+repos_payload = TEST_PAYLOAD[0][1]
+expected_repos = TEST_PAYLOAD[0][2]
+apache2_repos = TEST_PAYLOAD[0][3]
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -164,6 +172,31 @@ class TestGithubOrgClient(unittest.TestCase):
         """ tests org method of GithubOrgClient """
         client_inst = GithubOrgClient("no-org")
         self.assertEqual(client_inst.has_license(repo, license), exp)
+
+
+@parameterized_class(
+    ("org_payload", "repos_payload", "expected_repos", "apache2_repos"),
+    [
+        (org_payload, repos_payload, expected_repos, apache2_repos)
+    ]
+)
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """ integration test """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        """ sets up TestIntegrationGithubOrgClient """
+        m_req = MagicMock(json=MagicMock(return_value=repos_payload))
+        cls.patcher = patch("requests.get", return_value=m_req)
+        cls.get_patcher = cls.patcher.start()
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        """ tears down TestIntegrationGithubOrgClient """
+        cls.patcher.stop()
+
+    def test_req(self):
+        self.assertEqual(self.get_patcher("google").json(), repos_payload)
 
 
 if __name__ == "__main__":
