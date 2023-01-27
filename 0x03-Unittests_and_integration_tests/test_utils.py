@@ -186,7 +186,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         """ sets up TestIntegrationGithubOrgClient """
-        m_req = MagicMock(json=MagicMock(return_value=repos_payload))
+        m_req = MagicMock(json=MagicMock(side_effect=repos_payload))
         cls.patcher = patch("requests.get", return_value=m_req)
         cls.get_patcher = cls.patcher.start()
 
@@ -196,7 +196,33 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         cls.patcher.stop()
 
     def test_req(self):
-        self.assertEqual(self.get_patcher("google").json(), repos_payload)
+        self.assertEqual(self.get_patcher("google").json(), repos_payload[0])
+
+    @parameterized.expand([
+        ("google", {"repos_url": "https://google.com"}),
+        ("abc", {"repos_url": "https://abc.com"})
+        ])
+    @patch("client.get_json")
+    def test_public_repos(self, org, payload, m_get_json):
+        """ tests org method of GithubOrgClient """
+        import client
+        client_inst = GithubOrgClient(org)
+        with patch("client.GithubOrgClient._public_repos_url",
+                   new_callable=PropertyMock,
+                   return_value=payload.get("repos_url")) as m_pru:
+            self.assertEqual(client_inst._public_repos_url,
+                             payload.get("repos_url"))
+            client.get_json.assert_called_once
+            m_pru.assert_called_once
+
+    @parameterized.expand([
+        ({"license": {"key": "my_license"}}, "my_license", True),
+        ({"license": {"key": "other_license"}}, "my_license", False)
+        ])
+    def test_public_repos_with_license(self, repo, license, exp):
+        """ tests org method of GithubOrgClient """
+        client_inst = GithubOrgClient("no-org")
+        self.assertEqual(client_inst.has_license(repo, license), exp)
 
 
 if __name__ == "__main__":
