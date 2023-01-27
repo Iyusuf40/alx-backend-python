@@ -111,6 +111,7 @@ class TestMemoize(unittest.TestCase):
         with patch("__main__.testInstance.a_method",
                    return_value=42) as mocked_method:
             self.assertEqual(testInstance.a_property, 42)
+            testInstance.a_method.assert_called_once
             self.assertEqual(testInstance.a_property, 42)
             testInstance.a_method.assert_called_once
 
