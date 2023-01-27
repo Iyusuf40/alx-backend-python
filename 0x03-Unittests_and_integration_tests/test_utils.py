@@ -49,18 +49,32 @@ class TestAccessNestedMap(unittest.TestCase):
 
 class TestGetJson(unittest.TestCase):
     """ tests the get_json function """
+    # @parameterized.expand(
+    #     [
+    #         ("http://example.com", {"payload": True}),
+    #         ("http://holberton.io", {"payload": False})
+    #     ]
+    # )
+    # @patch("utils.get_json")
+    # def test_get_json(self, url, payload, get_json_mock):
+    #     """ mocks http request to url """
+    #     get_json_mock.json = MagicMock(return_value=payload)
+    #     self.assertEqual(get_json_mock.json(url), payload)
+    #     get_json_mock.json.assert_called_once_with(url)
+    #     return get_json_mock
     @parameterized.expand(
         [
             ("http://example.com", {"payload": True}),
             ("http://holberton.io", {"payload": False})
         ]
     )
-    @patch("utils.get_json")
+    @patch("utils.requests.get")
     def test_get_json(self, url, payload, get_json_mock):
         """ mocks http request to url """
-        get_json_mock.json = MagicMock(return_value=payload)
-        self.assertEqual(get_json_mock.json(url), payload)
-        get_json_mock.json.assert_called_once_with(url)
+        resp_obj = MagicMock(json=MagicMock(return_value=payload))
+        get_json_mock.return_value = resp_obj
+        self.assertEqual(get_json(url), payload)
+        get_json_mock.assert_called_once_with(url)
         return get_json_mock
 
 
