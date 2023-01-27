@@ -5,6 +5,7 @@ from unittest.mock import patch, MagicMock
 from parameterized import parameterized
 import utils
 
+
 class TestAccessNestedMap(TestCase):
     """Tests class for AccessNestedMap"""
 
@@ -28,7 +29,7 @@ class TestAccessNestedMap(TestCase):
 
 class TestGetJson(TestCase):
     """Test the get_json method"""
-    
+
     @parameterized.expand([("http://example.com", {"payload": True}),
                            ("http://holberton.io", {"payload": False})])
     def test_get_json(self, test_url, test_payload):
@@ -36,12 +37,12 @@ class TestGetJson(TestCase):
         Tests if the mocked get method was calles once
         Tests if the output is equal to the payload
         """
-        json_mock = MagicMock()
-        json_mock.json = MagicMock(return_value=test_payload)
-        with patch('utils.requests.get', return_value=json_mock) as mock_request:
+        json_mock = MagicMock(json=MagicMock(return_value=test_payload))
+        with patch('utils.requests.get', return_value=json_mock) as mock_req:
             payload = utils.get_json(test_url)
             self.assertEqual(payload, test_payload)
-            mock_request.assert_called_once
+            mock_req.assert_called_once
+
 
 if __name__ == "__main__":
     main()
