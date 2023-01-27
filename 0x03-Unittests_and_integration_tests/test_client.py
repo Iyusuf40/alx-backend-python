@@ -114,7 +114,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         """ sets up TestIntegrationGithubOrgClient """
-        m_req = MagicMock(json=MagicMock(side_effect=repos_payload))
+        m_req = MagicMock(json=MagicMock(side_effect=[repos_payload]))
         cls.patcher = patch("requests.get", return_value=m_req)
         cls.get_patcher = cls.patcher.start()
 
@@ -125,7 +125,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
 
     def test_req(self):
         """ test_req doc string """
-        self.assertEqual(self.get_patcher("google").json(), repos_payload[0])
+        self.assertEqual(self.get_patcher("google").json(), repos_payload)
 
     @parameterized.expand([
         ("google", {"repos_url": "https://google.com"}),
