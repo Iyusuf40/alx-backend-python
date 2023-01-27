@@ -32,7 +32,7 @@ apache2_repos = TEST_PAYLOAD[0][3]
 
 
 class TestGithubOrgClient(unittest.TestCase):
-    """ Tests GithubOrgClient """
+    """ unittesT: GithubOrgClient test case """
 
     @parameterized.expand([("google",),  ("abc",)])
     def test_org(self, org):
