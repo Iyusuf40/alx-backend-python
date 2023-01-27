@@ -96,7 +96,7 @@ class TestGithubOrgClient(unittest.TestCase):
     ]
 )
 class TestIntegrationGithubOrgClient(unittest.TestCase):
-    """ integration test """
+    """ integration test on GithubOrgClient """
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -111,6 +111,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         cls.patcher.stop()
 
     def test_req(self):
+        """ doc string """
         self.assertEqual(self.get_patcher("google").json(), repos_payload[0])
 
     @parameterized.expand([
