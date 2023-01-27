@@ -11,7 +11,7 @@ from typing import (
     Callable,
 )
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, PropertyMock
 from unittest.mock import patch
 from unittest import mock
 from utils import (
@@ -109,7 +109,21 @@ class TestGithubOrgClient(unittest.TestCase):
         import client  # to assert it was called
         with patch("client.get_json", return_value=org) as m_gt_json:
             self.assertEqual(client_inst.org, org)
-            client.get_json.assert_called_once
+            url = client_inst.ORG_URL.format(org=org)
+            client.get_json.assert_called_once_with(url)
+
+    @parameterized.expand([
+        ("google", {"repos_url": "https://google.com"}),
+        ("abc", {"repos_url": "https://abc.com"})
+        ])
+    def test_public_repos_url(self, org, payload):
+        """ tests org method of GithubOrgClient """
+        client_inst = GithubOrgClient(org)
+        with patch("client.GithubOrgClient.org",
+                   new_callable=PropertyMock,
+                   return_value=payload) as m_org:
+            self.assertEqual(client_inst._public_repos_url,
+                             payload.get("repos_url"))
 
 
 if __name__ == "__main__":
