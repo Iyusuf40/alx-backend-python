@@ -51,12 +51,13 @@ class TestGithubOrgClient(unittest.TestCase):
             client.get_json.assert_called_once_with(url)
 
     @parameterized.expand([
-        ("google", {"repos_url": "https://google.com"}),
-        ("abc", {"repos_url": "https://abc.com"})
+        ("google", {"repos_url": "https://api.github.com/orgs/{}/repos"}),
+        ("abc", {"repos_url": "https://api.github.com/orgs/{}/repos"})
         ])
     def test_public_repos_url(self, org, payload):
         """ tests org method of GithubOrgClient """
         client_inst = GithubOrgClient(org)
+        payload["repos_url"] = payload["repos_url"].format(org)
         with patch("client.GithubOrgClient.org",
                    new_callable=PropertyMock,
                    return_value=payload) as m_org:
