@@ -65,7 +65,7 @@ class TestGithubOrgClient(unittest.TestCase):
              return_value=payload
              ) as m_org:
             self.assertEqual(client_inst._public_repos_url,
-                             payload.get("repos_url"))
+                             payload["repos_url"])
 
     # @parameterized.expand([("google"), ("abc")])
     @patch("client.get_json")
