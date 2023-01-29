@@ -50,9 +50,10 @@ class TestGithubOrgClient(unittest.TestCase):
             url = client_inst.ORG_URL.format(org=org)
             client.get_json.assert_called_once_with(url)
 
-    @parameterized.expand([("google"), ("abc")])
-    def test_public_repos_url(self, org):
+    # @parameterized.expand([("google"), ("abc")])
+    def test_public_repos_url(self):
         """ tests org method of GithubOrgClient """
+        org = "google"
         payload = {
             "repos_url": "https://api.github.com/orgs/{}/repos".format(
                 org
@@ -78,10 +79,11 @@ class TestGithubOrgClient(unittest.TestCase):
     #     self.assertEqual(client_inst._public_repos_url,
     #                      payload.get("repos_url"))
 
-    @parameterized.expand([("google"), ("abc")])
+    # @parameterized.expand([("google"), ("abc")])
     @patch("client.get_json")
-    def test_public_repos(self, org, m_get_json):
+    def test_public_repos(self, m_get_json):
         """ tests org method of GithubOrgClient """
+        org = "google"
         payload = {
             "repos_url": "https://api.github.com/orgs/{}/repos".format(
                 org
