@@ -50,7 +50,6 @@ class TestGithubOrgClient(unittest.TestCase):
             url = client_inst.ORG_URL.format(org=org)
             client.get_json.assert_called_once_with(url)
 
-    # @parameterized.expand([("google"), ("abc")])
     def test_public_repos_url(self):
         """ tests org method of GithubOrgClient """
         org = "google"
@@ -60,24 +59,13 @@ class TestGithubOrgClient(unittest.TestCase):
             )
         }
         client_inst = GithubOrgClient(org)
-        payload["repos_url"] = payload["repos_url"].format(org)
-        with patch("client.GithubOrgClient.org",
-                   new_callable=PropertyMock,
-                   return_value=payload) as m_org:
+        with patch(
+            "client.GithubOrgClient.org",
+             new_callable=PropertyMock,
+             return_value=payload
+             ) as m_org:
             self.assertEqual(client_inst._public_repos_url,
                              payload.get("repos_url"))
-
-    # @parameterized.expand([
-    #     ("google", {"repos_url": "https://google.com"}),
-    #     ("abc", {"repos_url": "https://abc.com"})
-    #     ])
-    # @patch("client.GithubOrgClient.org", new_callable=PropertyMock)
-    # def test_public_repos_url(self, org, payload, m_org):
-    #     """ tests org method of GithubOrgClient """
-    #     client_inst = GithubOrgClient(org)
-    #     m_org.return_value = payload
-    #     self.assertEqual(client_inst._public_repos_url,
-    #                      payload.get("repos_url"))
 
     # @parameterized.expand([("google"), ("abc")])
     @patch("client.get_json")
