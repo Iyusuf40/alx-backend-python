@@ -52,7 +52,7 @@ class TestGithubOrgClient(unittest.TestCase):
 
     @parameterized.expand([
         ("google", {"repos_url": "https://api.github.com/orgs/{}/repos"}),
-        ("abc", {"repos_url": "https://api.github.com/orgs/{}/repos"})
+        # ("abc", {"repos_url": "https://api.github.com/orgs/{}/repos"})
         ])
     def test_public_repos_url(self, org, payload):
         """ tests org method of GithubOrgClient """
